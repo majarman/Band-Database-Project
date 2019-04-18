@@ -1,0 +1,71 @@
+--CSC 310 Stage 3 Michael Jarman
+
+CREATE TABLE majStudent
+(
+	StudentID int IDENTITY,
+	LastName VARCHAR(30) NOT NULL,
+	FirstName VARCHAR(30),
+	Grade VARCHAR(9),
+	Phone CHAR(10),
+	Dues money,
+	CONSTRAINT gradeCheck CHECK (Grade IN ('Freshman', 'Sophomore', 'Junior', 'Senior')),
+	PRIMARY KEY (StudentID)
+)
+
+CREATE TABLE majEnsemble
+(
+	EnsembleCode int,
+	Name VARCHAR(30) NOT NULL,
+	PRIMARY KEY (EnsembleCode)
+)
+
+CREATE TABLE majInstrumentType
+(
+	ITypeCode int,
+	InstrumentType VARCHAR(30) NOT NULL,
+	Family VARCHAR(15) NOT NULL,
+	CONSTRAINT familyCheck CHECK (Family IN ('Woodwinds', 'Brasswinds', 'Strings', 'Percussion', 'Keyboard')),
+	PRIMARY KEY (ITypeCode)
+)
+
+CREATE TABLE majInstrument
+(
+	InstrumentSN VARCHAR(30),
+	ITypeCode int,
+	FOREIGN KEY (ITypeCode) REFERENCES majInstrumentType (ITypeCode),
+	PRIMARY KEY (InstrumentSN)
+)
+
+CREATE TABLE majUniform
+(
+	UniformCode VARCHAR(6),
+	UniformSize VARCHAR(4) NOT NULL,
+	EnsembleCode int NOT NULL,
+	CONSTRAINT sizeCheck CHECK (UniformSize IN ('xs', 's', 'm', 'l', 'xl', 'xxl')),
+	FOREIGN KEY (EnsembleCode) REFERENCES majEnsemble (EnsembleCode),
+	PRIMARY KEY (UniformCode)
+)
+
+CREATE TABLE majSheetMusic
+(
+	MusicISBN VARCHAR(30),
+	Title VARCHAR(50) NOT NULL,
+	Composer VARCHAR(30),
+	EnsembleCode int NOT NULL,
+	FOREIGN KEY (EnsembleCode) REFERENCES majEnsemble (EnsembleCode),
+	PRIMARY KEY (MusicISBN)
+)
+
+CREATE TABLE majStudentEnsemble
+(
+	StudentID int,
+	EnsembleCode int,
+	InstrumentSN VARCHAR(30) NOT NULL,
+	Chair int,
+	UniformCode VARCHAR(6) NOT NULL,
+	FOREIGN KEY (StudentID) REFERENCES majStudent (StudentID),
+	FOREIGN KEY (EnsembleCode) REFERENCES majEnsemble (EnsembleCode),
+	FOREIGN KEY (InstrumentSN) REFERENCES majInstrument (InstrumentSN),
+	FOREIGN KEY (UniformCode) REFERENCES majUniform (UniformCode),
+	PRIMARY KEY (StudentID, EnsembleCode)
+)

@@ -1,0 +1,7 @@
+DROP TABLE majStudentEnsemble
+DROP TABLE majSheetMusic
+DROP TABLE majUniform
+DROP TABLE majInstrument
+DROP TABLE majInstrumentType
+DROP TABLE majEnsemble
+DROP TABLE majStudent
